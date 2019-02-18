@@ -6,7 +6,7 @@ import {
   Button,
   withStyles
 } from "@material-ui/core";
-import VerifiedUserOutlined from "@material-ui/core/styles/withStyles";
+import VerifiedUserOutlined from "@material-ui/icons/VerifiedUserOutlined";
 import { Link } from "react-router-dom";
 
 const styles = theme => ({
