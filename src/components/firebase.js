@@ -32,6 +32,21 @@ class Firebase {
       displayName: name
     });
   }
+
+  addQuote(quote) {
+    if (!this.auth.currentUser) {
+      return alert("Not authorized");
+    }
+    return this.db.doc(`users_login-app/${this.auth.currentUser.uid}`).set({
+      quote
+    });
+  }
+
+  isInitialized() {
+    return new Promise(resolve => {
+      this.auth.onAuthStateChanged(resolve);
+    });
+  }
 }
 
 export default new Firebase();

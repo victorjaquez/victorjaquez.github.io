@@ -11,6 +11,7 @@ import {
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { Link, withRouter } from "react-router-dom";
+import firebase from "../firebase";
 
 const styles = theme => ({
   main: {
@@ -48,6 +49,11 @@ const styles = theme => ({
 function Register(props) {
   const { classes } = props;
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [quote, setQuote] = useState("");
+
   return (
     <main className={classes.main}>
       <Paper className={classes.paper}>
@@ -63,11 +69,24 @@ function Register(props) {
         >
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="name">Name</InputLabel>
-            <Input id="name" name="name" autoComplete="off" autoFocus />
+            <Input
+              id="name"
+              name="name"
+              autoComplete="off"
+              autoFocus
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="off" />
+            <Input
+              id="email"
+              name="email"
+              autoComplete="off"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -76,11 +95,20 @@ function Register(props) {
               type="password"
               id="password"
               autoComplete="off"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="quote">Your Favorite Quote</InputLabel>
-            <Input name="quote" type="text" id="quote" autoComplete="off" />
+            <Input
+              name="quote"
+              type="text"
+              id="quote"
+              autoComplete="off"
+              value={quote}
+              onChange={e => setQuote(e.target.value)}
+            />
           </FormControl>
 
           <Button
@@ -88,7 +116,7 @@ function Register(props) {
             fullWidth
             variant="contained"
             color="primary"
-            //onClick={onRegister}
+            onClick={onRegister}
             className={classes.submit}
           >
             Register
@@ -109,6 +137,16 @@ function Register(props) {
       </Paper>
     </main>
   );
+
+  async function onRegister() {
+    try {
+      await firebase.register(name, email, password);
+      await firebase.addQuote(quote);
+      props.history.replace("/dashboard");
+    } catch (error) {
+      alert(error.message);
+    }
+  }
 }
 
 export default withRouter(withStyles(styles)(Register));
