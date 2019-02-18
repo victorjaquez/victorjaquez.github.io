@@ -48,6 +48,9 @@ const styles = theme => ({
 function SignIn(props) {
   const { classes } = props;
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <main className={classes.main}>
       <Paper className={classes.paper}>
@@ -63,7 +66,14 @@ function SignIn(props) {
         >
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="off" autoFocus />
+            <Input
+              id="email"
+              name="email"
+              autoComplete="off"
+              autoFocus
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -72,6 +82,8 @@ function SignIn(props) {
               type="password"
               id="password"
               autoComplete="off"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
           </FormControl>
           <Button
@@ -80,7 +92,7 @@ function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            //onClick={login}
+            onClick={login}
           >
             Sign in
           </Button>
@@ -99,6 +111,14 @@ function SignIn(props) {
       </Paper>
     </main>
   );
+
+  async function login() {
+    try {
+      await firebase.login(email.password);
+    } catch (error) {
+      alert(error.message);
+    }
+  }
 }
 
 export default withStyles(styles)(SignIn);
