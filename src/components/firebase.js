@@ -47,6 +47,17 @@ class Firebase {
       this.auth.onAuthStateChanged(resolve);
     });
   }
+
+  getCurrentUsername() {
+    return this.auth.currentUser && this.auth.currentUser.displayName;
+  }
+
+  async getCurrentUserQuote() {
+    const quote = await this.db
+      .doc(`users_login-app/${this.auth.currentUser.uid}`)
+      .get();
+    return quote.get("quote");
+  }
 }
 
 export default new Firebase();
